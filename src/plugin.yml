@@ -1,0 +1,8 @@
+name: ErrorNoise
+main: com.censoredsoftware.ErrorNoise.ErrorNoise
+version: 1
+authors: [HmmmQuestionMark]
+permissions:
+    errornoise.annoy:
+        description: The most annoying permission in the world.
+        default: false
