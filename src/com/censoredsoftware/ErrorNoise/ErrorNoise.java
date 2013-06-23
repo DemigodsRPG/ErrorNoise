@@ -1,14 +1,15 @@
 package com.censoredsoftware.ErrorNoise;
 
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 
 public class ErrorNoise extends JavaPlugin
 {
@@ -18,8 +19,8 @@ public class ErrorNoise extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
-		new ErrorHandler();
-		new Noise(this, Sound.BAT_IDLE, 2F, 0.9F);
+		new ErrorHandler(8);
+		new Annoy(this, ChatColor.RED + "An error has occurred, please check the server console.", Sound.BAT_IDLE, 2F, 0.9F);
 		getLogger().info("Successfully enabled.");
 	}
 
@@ -35,15 +36,23 @@ public class ErrorNoise extends JavaPlugin
 
 class ErrorHandler extends Handler
 {
-	public ErrorHandler()
+    private int preventSpamSeconds;
+
+	public ErrorHandler(int preventSpamSeconds)
 	{
+        this.preventSpamSeconds = preventSpamSeconds;
 		Bukkit.getServer().getLogger().addHandler(this);
 	}
 
 	@Override
 	public void publish(LogRecord record)
 	{
-		if(record.getLevel().equals(Level.SEVERE) || record.getLevel().equals(Level.WARNING)) Noise.ERROR = true;
+		if(record.getLevel().equals(Level.SEVERE) || record.getLevel().equals(Level.WARNING))
+		{
+			Annoy.ERROR = true;
+			if(Annoy.TIME + (preventSpamSeconds * 1000) <= System.currentTimeMillis()) Annoy.TEXT = true;
+			Annoy.TIME = System.currentTimeMillis();
+		}
 	}
 
 	@Override
@@ -55,15 +64,19 @@ class ErrorHandler extends Handler
 	{}
 }
 
-class Noise implements Runnable
+class Annoy implements Runnable
 {
-	public static boolean ERROR;
+	public static boolean ERROR, TEXT;
+	public static long TIME;
+	private String message;
 	private Sound sound;
 	private float volume, pitch;
 
-	public Noise(Plugin instance, Sound sound, float volume, float pitch)
+	public Annoy(Plugin instance, String message, Sound sound, float volume, float pitch)
 	{
 		ERROR = false;
+		TIME = System.currentTimeMillis();
+		this.message = message;
 		this.sound = sound;
 		this.volume = volume;
 		this.pitch = pitch;
@@ -78,6 +91,11 @@ class Noise implements Runnable
 			annoyWithNoise(sound, volume, pitch);
 			ERROR = false;
 		}
+		if(TEXT)
+		{
+			annoyWithText(message);
+			TEXT = false;
+		}
 	}
 
 	private void annoyWithNoise(Sound sound, float volume, float pitch)
@@ -85,6 +103,14 @@ class Noise implements Runnable
 		for(Player online : Bukkit.getServer().getOnlinePlayers())
 		{
 			if(online.hasPermission("errornoise.annoy")) online.playSound(online.getLocation(), sound, volume, pitch);
+		}
+	}
+
+	private void annoyWithText(String message)
+	{
+		for(Player online : Bukkit.getServer().getOnlinePlayers())
+		{
+			if(online.hasPermission("errornoise.annoy")) online.sendMessage(message);
 		}
 	}
 }
