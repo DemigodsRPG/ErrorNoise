@@ -47,6 +47,7 @@ class ErrorHandler extends Handler
 	@Override
 	public void publish(LogRecord record)
 	{
+        if(record.getMessage().contains("moved wrongly") || record.getMessage().contains("Can't keep up!") || record.getMessage().contains("No compatible nms block class found.")) return;
 		if(record.getLevel().equals(Level.SEVERE) || record.getLevel().equals(Level.WARNING))
 		{
 			Annoy.ERROR = true;
