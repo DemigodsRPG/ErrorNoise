@@ -1,4 +1,4 @@
-package com.censoredsoftware.ErrorNoise;
+package com.censoredsoftware.errornoise;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;
