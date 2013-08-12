@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.censoredsoftware.minecraft</groupId>
+    <artifactId>ErrorNoise</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>ErrorNoise</name>
+    <description>ErrorNoise for Bukkit/Spigot Minecraft Servers.</description>
+    <url>http://github.com/HmmmQuestionMark/Minecraft-ErrorNoise</url>
+
+    <licenses>
+        <license>
+            <name>Artistic License 2.0</name>
+            <url>LICENSE.txt</url>
+            <distribution>repo</distribution>
+            <comments>License on all contributions</comments>
+        </license>
+    </licenses>
+
+    <ciManagement>
+        <system>TeamCity</system>
+        <url>http://teamcity.censoredsoftware.com/</url>
+    </ciManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spigot.version>LATEST</spigot.version>
+    </properties>
+
+    <developers>
+        <developer>
+            <id>HmmmQuestionMark</id>
+            <name>Alexander Chauncey</name>
+            <organization>CensoredSoftware</organization>
+            <organizationUrl>http://www.censoredsoftware.com/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <properties>
+                <skype>HmmmQuestionMark</skype>
+            </properties>
+            <timezone>-4</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/HmmmQuestionMark/Minecraft-ErrorNoise.git</connection>
+        <developerConnection>scm:git:git://github.com/HmmmQuestionMark/Minecraft-ErrorNoise.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://github.com/HmmmQuestionMark/Minecraft-ErrorNoise</url>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>censored-software</id>
+            <name>censored-software-releases</name>
+            <url>http://artifactory.censoredsoftware.com/artifactory/libs-release-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>censored-software</id>
+            <name>censored-software-snapshots</name>
+            <url>http://artifactory.censoredsoftware.com/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>md_5-releases</id>
+            <url>http://repo.md-5.net/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>${spigot.version}</version>
+            <scope>compile</scope>
+            <type>jar</type>
+            <optional>false</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>ErrorNoise</finalName>
+        <defaultGoal>clean install</defaultGoal>
+        <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <preparationGoals>assembly:assembly</preparationGoals>
+                    <goals>assembly:assembly</goals>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <finalName>ErrorNoise</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
