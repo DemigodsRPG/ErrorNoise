@@ -1,0 +1,11 @@
+name: ErrorNoise-Lite
+main: com.censoredsoftware.errornoise.lite.ErrorNoise
+version: ${project.version}
+authors: [HmmmQuestionMark]
+permissions:
+    errornoise.annoy:
+        description: The most annoying permission in the world.
+        default: false
+    errornoise.annoytext:
+        description: The second most annoying permission in the world.
+        default: false

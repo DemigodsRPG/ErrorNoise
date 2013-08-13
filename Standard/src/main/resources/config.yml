@@ -5,4 +5,4 @@ error:
   message: '&cAn error has occurred, please check the server console.'
   sound: BAT_IDLE
   volume: 2F
-  pitch 0.9F
+  pitch: 0.9F
