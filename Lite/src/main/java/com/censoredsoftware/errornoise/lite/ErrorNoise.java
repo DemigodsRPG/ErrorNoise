@@ -12,111 +12,54 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-public class ErrorNoise extends JavaPlugin
-{
-    // Settings
-    protected static int secondsToWait = 8;
-    protected static String message = ChatColor.RED + "An error has occurred, please check the server console.";
-    protected static Sound sound = Sound.BAT_IDLE;
-    protected static Float volume = 2F, pitch = 0.9F;
-
-    /**
-     * The Bukkit enable method.
-     */
+public class ErrorNoise extends JavaPlugin {
+    protected static boolean ERROR, TEXT;
+    protected static long TIME;
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         new ErrorHandler();
-        new Annoy(this, message, sound, volume, pitch);
+        new Annoy(this);
         getLogger().info("Successfully enabled.");
     }
-
-    /**
-     * The Bukkit disable method.
-     */
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
         getLogger().info("Successfully disabled.");
     }
-
-    protected static class Annoy extends BukkitRunnable
-    {
-        protected static boolean ERROR, TEXT;
-        protected static long TIME;
-        protected static String PLUGIN;
-        private String message;
-        private Sound sound;
-        private float volume, pitch;
-
-        public Annoy(Plugin instance, String message, Sound sound, float volume, float pitch)
-        {
+    protected static class Annoy extends BukkitRunnable {
+        public Annoy(Plugin instance) {
             ERROR = false;
             TIME = System.currentTimeMillis();
-            PLUGIN = "";
-            this.message = message;
-            this.sound = sound;
-            this.volume = volume;
-            this.pitch = pitch;
             Bukkit.getScheduler().scheduleSyncRepeatingTask(instance, this, 1, 1);
         }
-
         @Override
-        public void run()
-        {
-            if(ERROR)
-            {
-                annoyWithNoise(sound, volume, pitch);
+        public void run() {
+            if(ERROR) {
+                for(Player online : Bukkit.getServer().getOnlinePlayers())
+                    if(online.hasPermission("errornoise.annoy")) online.playSound(online.getLocation(), Sound.BAT_IDLE, 2F, 0.9F);
                 ERROR = false;
             }
-            if(TEXT)
-            {
-                annoyWithText(message);
+            if(TEXT) {
+                for(Player online : Bukkit.getServer().getOnlinePlayers())
+                    if(online.hasPermission("errornoise.annoytext")) online.sendMessage(ChatColor.RED + "An error has occurred, please check the server console.");
                 TEXT = false;
             }
         }
-
-        private void annoyWithNoise(Sound sound, float volume, float pitch)
-        {
-            for(Player online : Bukkit.getServer().getOnlinePlayers())
-                if(online.hasPermission("errornoise.annoy")) online.playSound(online.getLocation(), sound, volume, pitch);
-        }
-
-        private void annoyWithText(String message)
-        {
-            for(Player online : Bukkit.getServer().getOnlinePlayers())
-                if(online.hasPermission("errornoise.annoytext")) online.sendMessage(message);
-        }
     }
-
-    protected static class ErrorHandler extends Handler
-    {
-        public ErrorHandler()
-        {
-            Bukkit.getServer().getLogger().addHandler(this);
-        }
-
+    protected static class ErrorHandler extends Handler {
+        public ErrorHandler() { Bukkit.getServer().getLogger().addHandler(this); }
         @Override
-        public void publish(LogRecord record)
-        {
+        public void publish(LogRecord record) {
             if(record.getMessage().contains("moved wrongly") || record.getMessage().contains("moved too quickly") || record.getMessage().contains("Can't keep up!") || record.getMessage().contains("No compatible nms block class found.")) return;
-            if(record.getLevel().equals(Level.SEVERE) || record.getLevel().equals(Level.WARNING)) triggerError();
+            if(record.getLevel().equals(Level.SEVERE) || record.getLevel().equals(Level.WARNING)) {
+                ERROR = true;
+                if(TIME + 8000 <= System.currentTimeMillis()) TEXT = true;
+                TIME = System.currentTimeMillis();
+            }
         }
-
-        public static void triggerError()
-        {
-            Annoy.ERROR = true;
-            if(Annoy.TIME + (secondsToWait * 1000) <= System.currentTimeMillis()) Annoy.TEXT = true;
-            Annoy.TIME = System.currentTimeMillis();
-        }
-
         @Override
-        public void flush()
-        {}
-
+        public void flush() {}
         @Override
-        public void close() throws SecurityException
-        {}
+        public void close() throws SecurityException {}
     }
 }
