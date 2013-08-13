@@ -88,7 +88,7 @@ public class ErrorNoise extends JavaPlugin
 			Annoy.TIME = System.currentTimeMillis();
 		}
 
-        private static void triggerError(String pluginName, String... messages)
+        public static void triggerError(String pluginName, String... messages)
         {
             Annoy.MESSAGES = Lists.newArrayList(messages);
             triggerError(pluginName);
@@ -99,7 +99,7 @@ public class ErrorNoise extends JavaPlugin
             triggerError(plugin.getName(), messages);
         }
 
-        private static void triggerError(String pluginName)
+        public static void triggerError(String pluginName)
         {
             Annoy.PLUGIN = pluginName;
             triggerError();
