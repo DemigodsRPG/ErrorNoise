@@ -1,5 +1,6 @@
 package com.censoredsoftware.errornoise;
 
+import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -9,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -86,7 +88,18 @@ public class ErrorNoise extends JavaPlugin
 			Annoy.TIME = System.currentTimeMillis();
 		}
 
-        public static void triggerError(String pluginName)
+        private static void triggerError(String pluginName, String... messages)
+        {
+            Annoy.MESSAGES = Lists.newArrayList(messages);
+            triggerError(pluginName);
+        }
+
+        public static void triggerError(Plugin plugin, String... messages)
+        {
+            triggerError(plugin.getName(), messages);
+        }
+
+        private static void triggerError(String pluginName)
         {
             Annoy.PLUGIN = pluginName;
             triggerError();
@@ -103,6 +116,7 @@ public class ErrorNoise extends JavaPlugin
 		protected static boolean ERROR, TEXT;
 		protected static long TIME;
         protected static String PLUGIN;
+        protected static List<String> MESSAGES;
 		private String message;
 		private Sound sound;
 		private float volume, pitch;
@@ -112,7 +126,8 @@ public class ErrorNoise extends JavaPlugin
 			ERROR = false;
 			TIME = System.currentTimeMillis();
             PLUGIN = "";
-			this.message = message;
+            MESSAGES = Lists.newArrayList();
+            this.message = message;
 			this.sound = sound;
 			this.volume = volume;
 			this.pitch = pitch;
@@ -133,6 +148,7 @@ public class ErrorNoise extends JavaPlugin
 				TEXT = false;
 			}
             if(!PLUGIN.equals("")) PLUGIN = "";
+            if(!MESSAGES.isEmpty()) MESSAGES = Lists.newArrayList();
 		}
 
 		private void annoyWithNoise(Sound sound, float volume, float pitch)
@@ -146,6 +162,14 @@ public class ErrorNoise extends JavaPlugin
 			for(Player online : Bukkit.getServer().getOnlinePlayers())
 				if(online.hasPermission("errornoise.annoytext"))
                 {
+                    if(!MESSAGES.isEmpty())
+                    {
+                        if(!PLUGIN.equals("")) for(String line : MESSAGES)
+                            online.sendMessage(ChatColor.getLastColors(line) + "[" + PLUGIN + "] " + line);
+                        else for(String line : MESSAGES)
+                            online.sendMessage(line);
+                        return;
+                    }
                     if(!PLUGIN.equals("")) online.sendMessage(ChatColor.getLastColors(message) + "[" + PLUGIN + "] " + message);
                     else online.sendMessage(message);
                 }
