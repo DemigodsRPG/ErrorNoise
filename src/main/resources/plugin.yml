@@ -1,5 +1,5 @@
 name: ErrorNoise
-main: com.censoredsoftware.errornoise.ErrorNoise
+main: com.censoredsoftware.fds.ErrorNoise
 version: ${project.version}
 authors: [HmmmQuestionMark]
 permissions:
