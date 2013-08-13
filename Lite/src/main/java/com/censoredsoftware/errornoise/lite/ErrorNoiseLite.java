@@ -12,7 +12,7 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-public class ErrorNoise extends JavaPlugin {
+public class ErrorNoiseLite extends JavaPlugin {
     protected static boolean ERROR, TEXT;
     protected static long TIME;
     @Override

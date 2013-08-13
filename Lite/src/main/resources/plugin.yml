@@ -1,5 +1,5 @@
 name: ErrorNoise-Lite
-main: com.censoredsoftware.errornoise.lite.ErrorNoise
+main: com.censoredsoftware.errornoise.lite.ErrorNoiseLite
 version: ${project.version}
 authors: [HmmmQuestionMark]
 permissions:
