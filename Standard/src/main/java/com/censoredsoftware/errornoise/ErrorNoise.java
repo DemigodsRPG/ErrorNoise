@@ -56,20 +56,62 @@ public class ErrorNoise extends JavaPlugin
 		saveConfig();
 
 		// Get settings
-        try { warning = config.getBoolean("error.warning"); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.warning' setting."); }
-        try { severe = config.getBoolean("error.severe"); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.severe' setting."); }
-        try { secondsToWait = config.getInt("error.seconds_to_wait"); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.seconds_to_wait' setting."); }
-        try { message = ChatColor.translateAlternateColorCodes('&', config.getString("error.message")); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.message' setting."); }
-        try { sound = Sound.valueOf(config.getString("error.sound")); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.sound' setting."); }
-        try { volume = Float.parseFloat(config.getString("error.volume")); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.volume' setting."); }
-        try { pitch = Float.parseFloat(config.getString("error.pitch")); }
-        catch(Exception e) { getLogger().warning("Could not load the 'error.pitch' setting."); }
+		try
+		{
+			warning = config.getBoolean("error.warning");
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.warning' setting.");
+		}
+		try
+		{
+			severe = config.getBoolean("error.severe");
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.severe' setting.");
+		}
+		try
+		{
+			secondsToWait = config.getInt("error.seconds_to_wait");
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.seconds_to_wait' setting.");
+		}
+		try
+		{
+			message = ChatColor.translateAlternateColorCodes('&', config.getString("error.message"));
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.message' setting.");
+		}
+		try
+		{
+			sound = Sound.valueOf(config.getString("error.sound"));
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.sound' setting.");
+		}
+		try
+		{
+			volume = Float.parseFloat(config.getString("error.volume"));
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.volume' setting.");
+		}
+		try
+		{
+			pitch = Float.parseFloat(config.getString("error.pitch"));
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'error.pitch' setting.");
+		}
 	}
 
 	private void startHandler()
@@ -88,35 +130,35 @@ public class ErrorNoise extends JavaPlugin
 			Annoy.TIME = System.currentTimeMillis();
 		}
 
-        public static void triggerError(String pluginName, String... messages)
-        {
-            Annoy.MESSAGES = Lists.newArrayList(messages);
-            triggerError(pluginName);
-        }
+		public static void triggerError(String pluginName, String... messages)
+		{
+			Annoy.MESSAGES = Lists.newArrayList(messages);
+			triggerError(pluginName);
+		}
 
-        public static void triggerError(Plugin plugin, String... messages)
-        {
-            triggerError(plugin.getName(), messages);
-        }
+		public static void triggerError(Plugin plugin, String... messages)
+		{
+			triggerError(plugin.getName(), messages);
+		}
 
-        public static void triggerError(String pluginName)
-        {
-            Annoy.PLUGIN = pluginName;
-            triggerError();
-        }
+		public static void triggerError(String pluginName)
+		{
+			Annoy.PLUGIN = pluginName;
+			triggerError();
+		}
 
-        public static void triggerError(Plugin plugin)
-        {
-            triggerError(plugin.getName());
-        }
+		public static void triggerError(Plugin plugin)
+		{
+			triggerError(plugin.getName());
+		}
 	}
 
 	protected static class Annoy extends BukkitRunnable
 	{
 		protected static boolean ERROR, TEXT;
 		protected static long TIME;
-        protected static String PLUGIN;
-        protected static List<String> MESSAGES;
+		protected static String PLUGIN;
+		protected static List<String> MESSAGES;
 		private String message;
 		private Sound sound;
 		private float volume, pitch;
@@ -125,9 +167,9 @@ public class ErrorNoise extends JavaPlugin
 		{
 			ERROR = false;
 			TIME = System.currentTimeMillis();
-            PLUGIN = "";
-            MESSAGES = Lists.newArrayList();
-            this.message = message;
+			PLUGIN = "";
+			MESSAGES = Lists.newArrayList();
+			this.message = message;
 			this.sound = sound;
 			this.volume = volume;
 			this.pitch = pitch;
@@ -147,8 +189,8 @@ public class ErrorNoise extends JavaPlugin
 				annoyWithText(message);
 				TEXT = false;
 			}
-            if(!PLUGIN.equals("")) PLUGIN = "";
-            if(!MESSAGES.isEmpty()) MESSAGES = Lists.newArrayList();
+			if(!PLUGIN.equals("")) PLUGIN = "";
+			if(!MESSAGES.isEmpty()) MESSAGES = Lists.newArrayList();
 		}
 
 		private void annoyWithNoise(Sound sound, float volume, float pitch)
@@ -161,22 +203,22 @@ public class ErrorNoise extends JavaPlugin
 		{
 			for(Player online : Bukkit.getServer().getOnlinePlayers())
 				if(online.hasPermission("errornoise.annoytext"))
-                {
-                    if(!MESSAGES.isEmpty())
-                    {
-                        if(!PLUGIN.equals("")) for(String line : MESSAGES)
-                            online.sendMessage(ChatColor.getLastColors(line) + "[" + PLUGIN + "] " + line);
-                        else for(String line : MESSAGES)
-                            online.sendMessage(line);
-                        return;
-                    }
-                    if(!PLUGIN.equals("")) online.sendMessage(ChatColor.getLastColors(message) + "[" + PLUGIN + "] " + message);
-                    else online.sendMessage(message);
-                }
+				{
+					if(!MESSAGES.isEmpty())
+					{
+						if(!PLUGIN.equals("")) for(String line : MESSAGES)
+							online.sendMessage(ChatColor.getLastColors(line) + "[" + PLUGIN + "] " + line);
+						else for(String line : MESSAGES)
+							online.sendMessage(line);
+						return;
+					}
+					if(!PLUGIN.equals("")) online.sendMessage(ChatColor.getLastColors(message) + "[" + PLUGIN + "] " + message);
+					else online.sendMessage(message);
+				}
 		}
 	}
 
-    protected static abstract class ErrorHandler extends Handler
+	protected static abstract class ErrorHandler extends Handler
 	{
 		public ErrorHandler()
 		{
@@ -195,17 +237,17 @@ public class ErrorNoise extends JavaPlugin
 		{}
 	}
 
-    protected static class WarningHandler extends ErrorHandler
+	protected static class WarningHandler extends ErrorHandler
 	{
 		@Override
 		public void publish(LogRecord record)
 		{
 			if(record.getMessage().contains("moved wrongly") || record.getMessage().contains("moved too quickly") || record.getMessage().contains("Can't keep up!") || record.getMessage().contains("No compatible nms block class found.")) return;
-			if(record.getLevel().equals(Level.WARNING));
+			if(record.getLevel().equals(Level.WARNING)) ;
 		}
 	}
 
-    protected static class SevereHandler extends ErrorHandler
+	protected static class SevereHandler extends ErrorHandler
 	{
 		@Override
 		public void publish(LogRecord record)
@@ -214,7 +256,7 @@ public class ErrorNoise extends JavaPlugin
 		}
 	}
 
-    protected static class WarningSevereHandler extends ErrorHandler
+	protected static class WarningSevereHandler extends ErrorHandler
 	{
 		@Override
 		public void publish(LogRecord record)
