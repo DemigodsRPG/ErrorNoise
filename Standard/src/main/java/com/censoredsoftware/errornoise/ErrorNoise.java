@@ -210,9 +210,8 @@ public class ErrorNoise extends JavaPlugin
 							online.sendMessage(ChatColor.getLastColors(line) + "[" + PLUGIN + "] " + line);
 						else for(String line : MESSAGES)
 							online.sendMessage(line);
-						continue;
 					}
-					if(!PLUGIN.equals("")) online.sendMessage(ChatColor.getLastColors(message) + "[" + PLUGIN + "] " + message);
+					else if(!PLUGIN.equals("")) online.sendMessage(ChatColor.getLastColors(message) + "[" + PLUGIN + "] " + message);
 					else online.sendMessage(message);
 				}
 		}
