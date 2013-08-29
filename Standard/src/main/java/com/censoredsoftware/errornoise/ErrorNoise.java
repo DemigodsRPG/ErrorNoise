@@ -4,6 +4,9 @@ import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,9 +18,10 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
-public class ErrorNoise extends JavaPlugin
+public class ErrorNoise extends JavaPlugin implements CommandExecutor
 {
 	// Settings
+	protected static ErrorNoise errorNoise;
 	protected static boolean warning = true;
 	protected static boolean severe = true;
 	protected static int secondsToWait = 8;
@@ -31,10 +35,12 @@ public class ErrorNoise extends JavaPlugin
 	@Override
 	public void onEnable()
 	{
+		errorNoise = this;
 		loadConfig();
 		new API();
 		startHandler();
 		new Annoy(this, message, sound, volume, pitch);
+		getCommand("showerror").setExecutor(this);
 		getLogger().info("Successfully enabled.");
 	}
 
@@ -241,7 +247,7 @@ public class ErrorNoise extends JavaPlugin
 		@Override
 		public void publish(LogRecord record)
 		{
-			if(record.getMessage().contains("moved wrongly") || record.getMessage().contains("moved too quickly") || record.getMessage().contains("Can't keep up!") || record.getMessage().contains("No compatible nms block class found.")) return;
+			if(containsIgnoredMessage(record)) return;
 			if(record.getLevel().equals(Level.WARNING)) ;
 		}
 	}
@@ -260,8 +266,22 @@ public class ErrorNoise extends JavaPlugin
 		@Override
 		public void publish(LogRecord record)
 		{
-			if(record.getMessage().contains("moved wrongly") || record.getMessage().contains("moved too quickly") || record.getMessage().contains("Can't keep up!") || record.getMessage().contains("No compatible nms block class found.")) return;
+			if(containsIgnoredMessage(record)) return;
 			if(record.getLevel().equals(Level.SEVERE) || record.getLevel().equals(Level.WARNING)) API.triggerError();
 		}
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+	{
+		if(command.getName().equals("showerror")) Annoy.TEXT = true;
+		return true;
+	}
+
+	protected static boolean containsIgnoredMessage(LogRecord record)
+	{
+		if(errorNoise.getConfig().isList("ignore")) for(String ignore : errorNoise.getConfig().getStringList("ignore"))
+			if(record.getMessage().contains(ignore)) return true;
+		return false;
 	}
 }

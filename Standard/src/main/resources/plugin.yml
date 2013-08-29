@@ -9,3 +9,6 @@ permissions:
     errornoise.annoytext:
         description: The second most annoying permission in the world.
         default: false
+commands:
+    showerror:
+        usage: /showerror

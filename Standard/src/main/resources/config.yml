@@ -6,3 +6,8 @@ error:
   sound: BAT_IDLE
   volume: 2F
   pitch: 0.9F
+ignore:
+  - 'moved wrongly'
+  - 'moved too quickly'
+  - 'Can\u0027t keep up!'
+  - 'No compatible nms block class found.'
