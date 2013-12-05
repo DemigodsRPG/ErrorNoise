@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.censoredsoftware.minecraft</groupId>
+    <groupId>com.censoredsoftware</groupId>
     <artifactId>ErrorNoise</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <modules>
         <module>Lite</module>
         <module>Standard</module>
@@ -22,12 +22,8 @@
         </license>
     </licenses>
 
-    <ciManagement>
-        <system>TeamCity</system>
-        <url>http://teamcity.censoredsoftware.com/</url>
-    </ciManagement>
-
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.version>LATEST</spigot.version>
     </properties>
 
@@ -46,26 +42,6 @@
             <timezone>-4</timezone>
         </developer>
     </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/HmmmQuestionMark/Minecraft-ErrorNoise.git</connection>
-        <developerConnection>scm:git:git://github.com/HmmmQuestionMark/Minecraft-ErrorNoise.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>http://github.com/HmmmQuestionMark/Minecraft-ErrorNoise</url>
-    </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>censored-software</id>
-            <name>censored-software-releases</name>
-            <url>http://artifactory.censoredsoftware.com/artifactory/libs-release-local</url>
-        </repository>
-        <snapshotRepository>
-            <id>censored-software</id>
-            <name>censored-software-snapshots</name>
-            <url>http://artifactory.censoredsoftware.com/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <repositories>
         <repository>

@@ -11,3 +11,5 @@ ignore:
   - 'moved too quickly'
   - 'Can\u0027t keep up!'
   - 'No compatible nms block class found.'
+console:
+  prevent_ignored_info: true

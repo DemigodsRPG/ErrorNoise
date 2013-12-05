@@ -13,8 +13,9 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class ErrorNoiseLite extends JavaPlugin {
-    protected static boolean ERROR, TEXT;
-    protected static long TIME;
+    private static boolean ERROR;
+    private static boolean TEXT;
+    private static long TIME;
     @Override
     public void onEnable() {
         new ErrorHandler();
@@ -26,7 +27,7 @@ public class ErrorNoiseLite extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
         getLogger().info("Successfully disabled.");
     }
-    protected static class Annoy extends BukkitRunnable {
+    static class Annoy extends BukkitRunnable {
         public Annoy(Plugin instance) {
             ERROR = false;
             TIME = System.currentTimeMillis();
@@ -46,7 +47,7 @@ public class ErrorNoiseLite extends JavaPlugin {
             }
         }
     }
-    protected static class ErrorHandler extends Handler {
+    static class ErrorHandler extends Handler {
         public ErrorHandler() { Bukkit.getServer().getLogger().addHandler(this); }
         @Override
         public void publish(LogRecord record) {

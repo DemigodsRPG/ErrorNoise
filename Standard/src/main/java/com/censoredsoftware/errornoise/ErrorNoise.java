@@ -21,13 +21,15 @@ import java.util.logging.LogRecord;
 public class ErrorNoise extends JavaPlugin implements CommandExecutor
 {
 	// Settings
-	protected static ErrorNoise errorNoise;
-	protected static boolean warning = true;
-	protected static boolean severe = true;
-	protected static int secondsToWait = 8;
-	protected static String message = ChatColor.RED + "An error has occurred, please check the server console.";
-	protected static Sound sound = Sound.BAT_IDLE;
-	protected static Float volume = 2F, pitch = 0.9F;
+	private static ErrorNoise ERROR_NOISE;
+	private static boolean WARNING = true;
+	private static boolean SEVERE = true;
+	private static int SECONDS_TO_WAIT = 8;
+	private static String MESSAGE = ChatColor.RED + "An error has occurred, please check the server console.";
+	private static Sound SOUND = Sound.BAT_IDLE;
+	private static Float VOLUME = 2F;
+	private static Float PITCH = 0.9F;
+	private static boolean PREVENT_IGNORED_INFO = true;
 
 	/**
 	 * The Bukkit enable method.
@@ -35,11 +37,11 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 	@Override
 	public void onEnable()
 	{
-		errorNoise = this;
+		ERROR_NOISE = this;
 		loadConfig();
 		new API();
 		startHandler();
-		new Annoy(this, message, sound, volume, pitch);
+		new Annoy(this, MESSAGE, SOUND, VOLUME, PITCH);
 		getCommand("showerror").setExecutor(this);
 		getLogger().info("Successfully enabled.");
 	}
@@ -64,7 +66,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		// Get settings
 		try
 		{
-			warning = config.getBoolean("error.warning");
+			WARNING = config.getBoolean("error.warning");
 		}
 		catch(Exception e)
 		{
@@ -72,7 +74,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 		try
 		{
-			severe = config.getBoolean("error.severe");
+			SEVERE = config.getBoolean("error.severe");
 		}
 		catch(Exception e)
 		{
@@ -80,7 +82,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 		try
 		{
-			secondsToWait = config.getInt("error.seconds_to_wait");
+			SECONDS_TO_WAIT = config.getInt("error.seconds_to_wait");
 		}
 		catch(Exception e)
 		{
@@ -88,7 +90,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 		try
 		{
-			message = ChatColor.translateAlternateColorCodes('&', config.getString("error.message"));
+			MESSAGE = ChatColor.translateAlternateColorCodes('&', config.getString("error.message"));
 		}
 		catch(Exception e)
 		{
@@ -96,7 +98,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 		try
 		{
-			sound = Sound.valueOf(config.getString("error.sound"));
+			SOUND = Sound.valueOf(config.getString("error.sound"));
 		}
 		catch(Exception e)
 		{
@@ -104,27 +106,36 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 		try
 		{
-			volume = Float.parseFloat(config.getString("error.volume"));
+			VOLUME = Float.parseFloat(config.getString("error.VOLUME"));
 		}
 		catch(Exception e)
 		{
-			getLogger().warning("Could not load the 'error.volume' setting.");
+			getLogger().warning("Could not load the 'error.VOLUME' setting.");
 		}
 		try
 		{
-			pitch = Float.parseFloat(config.getString("error.pitch"));
+			PITCH = Float.parseFloat(config.getString("error.pitch"));
 		}
 		catch(Exception e)
 		{
 			getLogger().warning("Could not load the 'error.pitch' setting.");
 		}
+		try
+		{
+			PREVENT_IGNORED_INFO = config.getBoolean("console.prevent_ignored_info");
+		}
+		catch(Exception e)
+		{
+			getLogger().warning("Could not load the 'console.block_ignored_info_logs' setting.");
+		}
 	}
 
 	private void startHandler()
 	{
-		if(warning && severe) new WarningSevereHandler();
-		else if(warning) new WarningHandler();
-		else if(severe) new SevereHandler();
+		if(PREVENT_IGNORED_INFO) new IgnoreHandler();
+		if(WARNING && SEVERE) new WarningSevereHandler();
+		else if(WARNING) new WarningHandler();
+		else if(SEVERE) new SevereHandler();
 	}
 
 	public static class API
@@ -132,7 +143,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		public static void triggerError()
 		{
 			Annoy.ERROR = true;
-			if(Annoy.TIME + (secondsToWait * 1000) <= System.currentTimeMillis()) Annoy.TEXT = true;
+			if(Annoy.TIME + (SECONDS_TO_WAIT * 1000) <= System.currentTimeMillis()) Annoy.TEXT = true;
 			Annoy.TIME = System.currentTimeMillis();
 		}
 
@@ -159,15 +170,17 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 	}
 
-	protected static class Annoy extends BukkitRunnable
+	static class Annoy extends BukkitRunnable
 	{
-		protected static boolean ERROR, TEXT;
-		protected static long TIME;
-		protected static String PLUGIN;
-		protected static List<String> MESSAGES;
-		private String message;
-		private Sound sound;
-		private float volume, pitch;
+		static boolean ERROR;
+		static boolean TEXT;
+		static long TIME;
+		static String PLUGIN;
+		static List<String> MESSAGES;
+		private final String message;
+		private final Sound sound;
+		private final float volume;
+		private final float pitch;
 
 		public Annoy(Plugin instance, String message, Sound sound, float volume, float pitch)
 		{
@@ -223,7 +236,7 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		}
 	}
 
-	protected static abstract class ErrorHandler extends Handler
+	static abstract class ErrorHandler extends Handler
 	{
 		public ErrorHandler()
 		{
@@ -242,13 +255,22 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		{}
 	}
 
+	protected static class IgnoreHandler extends ErrorHandler
+	{
+		@Override
+		public void publish(LogRecord record)
+		{
+			if(containsIgnoredMessage(record) && record.getLevel().equals(Level.INFO)) record.setLevel(Level.OFF);
+		}
+	}
+
 	protected static class WarningHandler extends ErrorHandler
 	{
 		@Override
 		public void publish(LogRecord record)
 		{
 			if(containsIgnoredMessage(record)) return;
-			if(record.getLevel().equals(Level.WARNING)) ;
+			if(record.getLevel().equals(Level.WARNING)) API.triggerError();
 		}
 	}
 
@@ -278,9 +300,9 @@ public class ErrorNoise extends JavaPlugin implements CommandExecutor
 		return true;
 	}
 
-	protected static boolean containsIgnoredMessage(LogRecord record)
+	private static boolean containsIgnoredMessage(LogRecord record)
 	{
-		if(errorNoise.getConfig().isList("ignore")) for(String ignore : errorNoise.getConfig().getStringList("ignore"))
+		if(ERROR_NOISE.getConfig().isList("ignore")) for(String ignore : ERROR_NOISE.getConfig().getStringList("ignore"))
 			if(record.getMessage().contains(ignore)) return true;
 		return false;
 	}

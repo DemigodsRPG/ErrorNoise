@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>ErrorNoise</artifactId>
-        <groupId>com.censoredsoftware.minecraft</groupId>
-        <version>1.0.3</version>
+        <groupId>com.censoredsoftware</groupId>
+        <version>1.0.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,11 +23,6 @@
             <comments>License on all contributions</comments>
         </license>
     </licenses>
-
-    <ciManagement>
-        <system>TeamCity</system>
-        <url>http://teamcity.censoredsoftware.com/</url>
-    </ciManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
