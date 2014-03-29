@@ -14,62 +14,47 @@ import java.util.logging.LogRecord;
  */
 public class ErrorHandlerLite extends Handler
 {
-    // -- STATIC -- //
+	// -- STATIC -- //
 
-    private static boolean text;
-    private static Long time;
+	private static boolean text;
+	private static Long time;
 
-    // -- END STATIC -- //
+	// -- END STATIC -- //
 
-    public ErrorHandlerLite()
-    {
-        time = System.currentTimeMillis();
-    }
+	public ErrorHandlerLite()
+	{
+		time = System.currentTimeMillis();
+	}
 
-    @Override
-    public void publish(LogRecord record)
-    {
-        if(Level.WARNING.equals(record.getLevel()) || Level.SEVERE.equals(record.getLevel()))
-            run();
-    }
+	@Override
+	public void publish(LogRecord record)
+	{
+		if(Level.WARNING.equals(record.getLevel()) || Level.SEVERE.equals(record.getLevel()))
+		{
+			// Set the text boolean.
+			if(time + 8000 <= System.currentTimeMillis()) text = true;
 
-    @Override
-    public void flush()
-    {}
+			// Set the time.
+			time = System.currentTimeMillis();
 
-    @Override
-    public void close() throws SecurityException
-    {}
+			for(Player online : Bukkit.getOnlinePlayers())
+			{
+				if(online.hasPermission("errornoise.annoy")) online.playSound(online.getLocation(), Sound.BAT_IDLE, 2F, 0.9F);
 
-    public void run()
-    {
-        // Set the text boolean.
-        if(time + 8000 <= System.currentTimeMillis()) text = true;
+				// If the text boolean is true, alert with text.
+				if(text && online.hasPermission("errornoise.annoytext")) online.sendMessage(ChatColor.RED + "An error has occurred, please check the server console.");
+			}
 
-        // Set the time.
-        time = System.currentTimeMillis();
+			// Set text to false.
+			text = false;
+		}
+	}
 
-        annoyWithNoise();
+	@Override
+	public void flush()
+	{}
 
-        // If the text boolean is true, alert with text.
-        if(text)
-        {
-            annoyWithText();
-            text = false;
-        }
-    }
-
-    private void annoyWithNoise()
-    {
-        for(Player online : Bukkit.getServer().getOnlinePlayers())
-            if(online.hasPermission("errornoise.annoy"))
-                online.playSound(online.getLocation(), Sound.BAT_IDLE, 2F, 0.9F);
-    }
-
-    private void annoyWithText()
-    {
-        for(Player online : Bukkit.getServer().getOnlinePlayers())
-            if(online.hasPermission("errornoise.annoytext"))
-                online.sendMessage(ChatColor.RED + "An error has occurred, please check the server console.");
-    }
+	@Override
+	public void close() throws SecurityException
+	{}
 }

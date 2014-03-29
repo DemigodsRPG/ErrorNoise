@@ -3,8 +3,8 @@ package com.censoredsoftware.errornoise;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.logging.Level;
 
 public class ErrorTask implements Runnable
@@ -39,32 +39,30 @@ public class ErrorTask implements Runnable
         // Set the time.
         time = System.currentTimeMillis();
 
-        annoyWithNoise();
-
-        // If the text boolean is true, alert with text.
-        if(text)
+		for(Player online : Bukkit.getOnlinePlayers())
         {
-            annoyWithText();
-            text = false;
-        }
+			annoyWithNoise(online);
+
+			// If the text boolean is true, alert with text.
+			if(text) annoyWithText(online);
+  }
+
+        // Set text to false.
+        text = false;
+	}
+
+	Level getLevel()
+	{
+		return level;
     }
 
-    Level getLevel()
+    private void annoyWithNoise(Player player)
     {
-        return level;
-    }
+		if(player.hasPermission("errornoise.annoy")) player.playSound(player.getLocation(), sound, volume, pitch);
+	}
 
-    private void annoyWithNoise()
-    {
-        Arrays.asList(Bukkit.getServer().getOnlinePlayers()).stream()
-                .filter(online -> online.hasPermission("errornoise.annoy"))
-                .forEach(online -> online.playSound(online.getLocation(), sound, volume, pitch));
-    }
-
-    private void annoyWithText()
-    {
-        Arrays.asList(Bukkit.getServer().getOnlinePlayers()).stream()
-                .filter(online -> online.hasPermission("errornoise.annoytext"))
-                .forEach(online -> online.sendMessage(message));
+	private void annoyWithText(Player player)
+	{
+		if(player.hasPermission("errornoise.annoytext")) player.sendMessage(message);
     }
 }
