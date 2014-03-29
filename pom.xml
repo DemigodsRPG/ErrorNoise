@@ -5,17 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.censoredsoftware</groupId>
-    <artifactId>ErrorNoise</artifactId>
-    <version>1.0.6</version>
+    <artifactId>errornoise</artifactId>
+    <version>1.1.0</version>
     <modules>
         <module>Lite</module>
+        <module>Neo</module>
         <module>Standard</module>
     </modules>
     <packaging>pom</packaging>
 
+    <name>ErrorNoise</name>
+
     <licenses>
         <license>
-            <name>Artistic License 2.0</name>
+            <name>MIT License</name>
             <url>LICENSE.txt</url>
             <distribution>repo</distribution>
             <comments>License on all contributions</comments>
@@ -24,7 +27,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>LATEST</spigot.version>
+        <spigot.version>1.7.5-R0.1-SNAPSHOT</spigot.version>
     </properties>
 
     <developers>
@@ -55,13 +58,11 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>${spigot.version}</version>
-            <scope>compile</scope>
-            <type>jar</type>
-            <optional>false</optional>
         </dependency>
     </dependencies>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
     </build>
+
 </project>

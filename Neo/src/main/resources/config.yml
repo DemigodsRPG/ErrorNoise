@@ -1,0 +1,14 @@
+error:
+  levels:
+    - WARNING
+    - SEVERE
+  seconds_to_wait: 8
+  message: '&cAn error has occurred, please check the server console.'
+  sound: BAT_IDLE
+  volume: 2F
+  pitch: 0.9F
+ignore:
+  - 'moved wrongly'
+  - 'moved too quickly'
+  - 'Can\u0027t keep up!'
+  - 'No compatible nms block class found.'

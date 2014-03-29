@@ -3,49 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ErrorNoise</artifactId>
+        <artifactId>errornoise</artifactId>
         <groupId>com.censoredsoftware</groupId>
-        <version>1.0.6</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ErrorNoise-Standard</artifactId>
+    <artifactId>errornoise-standard</artifactId>
 
-    <name>ErrorNoise-Standard</name>
-    <description>ErrorNoise for Bukkit/Spigot Minecraft Servers.</description>
-    <url>http://github.com/HmmmQuestionMark/Minecraft-ErrorNoise</url>
-
-    <licenses>
-        <license>
-            <name>Artistic License 2.0</name>
-            <url>LICENSE.txt</url>
-            <distribution>repo</distribution>
-            <comments>License on all contributions</comments>
-        </license>
-    </licenses>
+    <name>ErrorNoise Standard</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>LATEST</spigot.version>
     </properties>
 
-    <developers>
-        <developer>
-            <id>HmmmQuestionMark</id>
-            <name>Alexander Chauncey</name>
-            <organization>CensoredSoftware</organization>
-            <organizationUrl>http://www.censoredsoftware.com/</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <properties>
-                <skype>HmmmQuestionMark</skype>
-            </properties>
-            <timezone>-4</timezone>
-        </developer>
-    </developers>
-
     <build>
+        <!-- Standard version ships with this name. -->
         <finalName>ErrorNoise</finalName>
         <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java/</sourceDirectory>
@@ -83,10 +56,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
-                <configuration>
-                    <finalName>ErrorNoise</finalName>
-                </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>
