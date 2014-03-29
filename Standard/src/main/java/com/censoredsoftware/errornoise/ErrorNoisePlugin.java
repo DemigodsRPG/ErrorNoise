@@ -30,7 +30,7 @@ public class ErrorNoisePlugin extends JavaPlugin
 
         // Register the levels.
         for(Level level : logLevels)
-                ErrorNoiseRegistry.register(level);
+            ErrorNoiseRegistry.register(level);
 
         // Alert the console.
         getLogger().info("Successfully enabled.");
