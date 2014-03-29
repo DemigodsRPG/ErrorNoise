@@ -9,60 +9,60 @@ import java.util.logging.Level;
 
 public class ErrorTask implements Runnable
 {
-    // -- STATIC -- //
+	// -- STATIC -- //
 
-    private final Level level;
+	private final Level level;
 
-    private static boolean text;
-    private static Long time;
+	private static boolean text;
+	private static Long time;
 
-    static int secondsToWait = 8;
-    static String message = ChatColor.RED + "An error has occurred, please check the server console.";
-    static Sound sound = Sound.BAT_IDLE;
-    static Float volume = 2F;
-    static Float pitch = 0.9F;
+	static int secondsToWait = 8;
+	static String message = ChatColor.RED + "An error has occurred, please check the server console.";
+	static Sound sound = Sound.BAT_IDLE;
+	static Float volume = 2F;
+	static Float pitch = 0.9F;
 
-    // -- END STATIC -- //
+	// -- END STATIC -- //
 
-    public ErrorTask(Level level)
-    {
-        this.level = level;
-        time = System.currentTimeMillis();
-    }
+	public ErrorTask(Level level)
+	{
+		this.level = level;
+		time = System.currentTimeMillis();
+	}
 
-    @Override
-    public void run()
-    {
-        // Set the text boolean.
-        if(time + (secondsToWait * 1000) <= System.currentTimeMillis()) text = true;
+	@Override
+	public void run()
+	{
+		// Set the text boolean.
+		if(time + (secondsToWait * 1000) <= System.currentTimeMillis()) text = true;
 
-        // Set the time.
-        time = System.currentTimeMillis();
+		// Set the time.
+		time = System.currentTimeMillis();
 
 		for(Player online : Bukkit.getOnlinePlayers())
-        {
+		{
 			annoyWithNoise(online);
 
 			// If the text boolean is true, alert with text.
 			if(text) annoyWithText(online);
-  }
+		}
 
-        // Set text to false.
-        text = false;
+		// Set text to false.
+		text = false;
 	}
 
 	Level getLevel()
 	{
 		return level;
-    }
+	}
 
-    private void annoyWithNoise(Player player)
-    {
+	private void annoyWithNoise(Player player)
+	{
 		if(player.hasPermission("errornoise.annoy")) player.playSound(player.getLocation(), sound, volume, pitch);
 	}
 
 	private void annoyWithText(Player player)
 	{
 		if(player.hasPermission("errornoise.annoytext")) player.sendMessage(message);
-    }
+	}
 }

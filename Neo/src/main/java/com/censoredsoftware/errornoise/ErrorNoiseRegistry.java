@@ -14,41 +14,42 @@ import java.util.logging.Logger;
  */
 public class ErrorNoiseRegistry
 {
-    // The logger.
-    private static final Logger LOGGER = Bukkit.getServer().getLogger();
-    private static final List<ErrorTask> TASKS = new ArrayList<>();
+	// The logger.
+	private static final Logger LOGGER = Bukkit.getServer().getLogger();
+	private static final List<ErrorTask> TASKS = new ArrayList<>();
 
-    private ErrorNoiseRegistry()
-    {}
+	private ErrorNoiseRegistry()
+	{
+	}
 
-    static List<Handler> getErrorHandlers()
-    {
-        // Get all of the handlers in a new ArrayList.
-        List<Handler> handlers = new ArrayList<>(Arrays.asList(Bukkit.getServer().getLogger().getHandlers()));
+	static List<Handler> getErrorHandlers()
+	{
+		// Get all of the handlers in a new ArrayList.
+		List<Handler> handlers = new ArrayList<>(Arrays.asList(Bukkit.getServer().getLogger().getHandlers()));
 
-        // Remove all non-relevant handlers from this list.
-        handlers.removeIf(handler -> !(handler instanceof ErrorHandler));
+		// Remove all non-relevant handlers from this list.
+		handlers.removeIf(handler -> !(handler instanceof ErrorHandler));
 
-        // Return the list of handlers.
-        return handlers;
-    }
+		// Return the list of handlers.
+		return handlers;
+	}
 
-    static List<ErrorTask> getErrorTasks()
-    {
-        return TASKS;
-    }
+	static List<ErrorTask> getErrorTasks()
+	{
+		return TASKS;
+	}
 
-    static void register(Level level)
-    {
-        // Create and register an error handler for this log level.
-        LOGGER.addHandler(new ErrorHandler(level));
+	static void register(Level level)
+	{
+		// Create and register an error handler for this log level.
+		LOGGER.addHandler(new ErrorHandler(level));
 
-        // Create and register an error task for this log level.
-        TASKS.add(new ErrorTask(level));
-    }
+		// Create and register an error task for this log level.
+		TASKS.add(new ErrorTask(level));
+	}
 
-    static void alertErrorTasks(Level level)
-    {
-        TASKS.stream().filter(task -> level.equals(task.getLevel())).forEach(ErrorTask::run);
-    }
+	static void alertErrorTasks(Level level)
+	{
+		TASKS.stream().filter(task -> level.equals(task.getLevel())).forEach(ErrorTask::run);
+	}
 }

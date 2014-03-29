@@ -16,107 +16,107 @@ import java.util.logging.Logger;
  */
 public class ErrorNoisePlugin extends JavaPlugin
 {
-    private Set<Level> logLevels = new HashSet<>();
+	private Set<Level> logLevels = new HashSet<>();
 
-    /**
-     * The Bukkit enable method.
-     */
-    @Override
-    public void onEnable()
-    {
-        // Load the config.
-        loadConfig();
+	/**
+	 * The Bukkit enable method.
+	 */
+	@Override
+	public void onEnable()
+	{
+		// Load the config.
+		loadConfig();
 
-        // Register the levels.
-        logLevels.forEach(ErrorNoiseRegistry::register);
+		// Register the levels.
+		logLevels.forEach(ErrorNoiseRegistry::register);
 
-        // Alert the console.
-        getLogger().info("Successfully enabled.");
-    }
+		// Alert the console.
+		getLogger().info("Successfully enabled.");
+	}
 
-    /**
-     * The Bukkit disable method.
-     */
-    @Override
-    public void onDisable()
-    {
-        // Remove all handlers.
-        ErrorNoiseRegistry.getErrorHandlers().forEach(handler ->
-                Bukkit.getServer().getLogger().removeHandler(handler));
+	/**
+	 * The Bukkit disable method.
+	 */
+	@Override
+	public void onDisable()
+	{
+		// Remove all handlers.
+		ErrorNoiseRegistry.getErrorHandlers().forEach(handler ->
+				Bukkit.getServer().getLogger().removeHandler(handler));
 
-        // Alert the console.
-        getLogger().info("Successfully disabled.");
-    }
+		// Alert the console.
+		getLogger().info("Successfully disabled.");
+	}
 
-    // Load the config with error handling.
-    private void loadConfig()
-    {
-        // Save defaults
-        Configuration config = getConfig();
-        config.options().copyDefaults(true);
-        saveConfig();
+	// Load the config with error handling.
+	private void loadConfig()
+	{
+		// Save defaults
+		Configuration config = getConfig();
+		config.options().copyDefaults(true);
+		saveConfig();
 
-        // Logger
-        Logger logger = getLogger();
+		// Logger
+		Logger logger = getLogger();
 
-        // Get settings
-        try
-        {
-            config.getStringList("error.levels").forEach(level -> logLevels.add(Level.parse(level.toUpperCase())));
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'error.levels' setting.");
-            logLevels.add(Level.WARNING);
-            logLevels.add(Level.SEVERE);
-        }
-        try
-        {
-            ErrorTask.secondsToWait = config.getInt("error.seconds_to_wait");
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'error.seconds_to_wait' setting.");
-        }
-        try
-        {
-            ErrorTask.message = ChatColor.translateAlternateColorCodes('&', config.getString("error.message"));
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'error.message' setting.");
-        }
-        try
-        {
-            ErrorTask.sound = Sound.valueOf(config.getString("error.sound"));
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'error.sound' setting.");
-        }
-        try
-        {
-            ErrorTask.volume = Float.parseFloat(config.getString("error.volume"));
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'error.volume' setting.");
-        }
-        try
-        {
-            ErrorTask.pitch = Float.parseFloat(config.getString("error.pitch"));
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'error.pitch' setting.");
-        }
-        try
-        {
-            ErrorHandler.ignoredMessages = config.getStringList("ignore");
-        }
-        catch(Exception e)
-        {
-            logger.warning("Could not load the 'ignore' list setting.");
-        }
-    }
+		// Get settings
+		try
+		{
+			config.getStringList("error.levels").forEach(level -> logLevels.add(Level.parse(level.toUpperCase())));
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'error.levels' setting.");
+			logLevels.add(Level.WARNING);
+			logLevels.add(Level.SEVERE);
+		}
+		try
+		{
+			ErrorTask.secondsToWait = config.getInt("error.seconds_to_wait");
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'error.seconds_to_wait' setting.");
+		}
+		try
+		{
+			ErrorTask.message = ChatColor.translateAlternateColorCodes('&', config.getString("error.message"));
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'error.message' setting.");
+		}
+		try
+		{
+			ErrorTask.sound = Sound.valueOf(config.getString("error.sound"));
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'error.sound' setting.");
+		}
+		try
+		{
+			ErrorTask.volume = Float.parseFloat(config.getString("error.volume"));
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'error.volume' setting.");
+		}
+		try
+		{
+			ErrorTask.pitch = Float.parseFloat(config.getString("error.pitch"));
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'error.pitch' setting.");
+		}
+		try
+		{
+			ErrorHandler.ignoredMessages = config.getStringList("ignore");
+		}
+		catch(Exception e)
+		{
+			logger.warning("Could not load the 'ignore' list setting.");
+		}
+	}
 }

@@ -11,31 +11,33 @@ import java.util.logging.LogRecord;
  */
 public class ErrorHandler extends Handler
 {
-    // -- STATIC -- //
+	// -- STATIC -- //
 
-    static List<String> ignoredMessages = new ArrayList<>();
+	static List<String> ignoredMessages = new ArrayList<>();
 
-    // -- END STATIC -- //
+	// -- END STATIC -- //
 
-    private final Level level;
+	private final Level level;
 
-    ErrorHandler(Level level)
-    {
-        this.level = level;
-    }
+	ErrorHandler(Level level)
+	{
+		this.level = level;
+	}
 
-    @Override
-    public void publish(LogRecord record)
-    {
-        if(!ignoredMessages.contains(record.getMessage()) && level.equals(record.getLevel()))
-            ErrorNoiseRegistry.alertErrorTasks(level);
-    }
+	@Override
+	public void publish(LogRecord record)
+	{
+		if(!ignoredMessages.contains(record.getMessage()) && level.equals(record.getLevel()))
+			ErrorNoiseRegistry.alertErrorTasks(level);
+	}
 
-    @Override
-    public void flush()
-    {}
+	@Override
+	public void flush()
+	{
+	}
 
-    @Override
-    public void close() throws SecurityException
-    {}
+	@Override
+	public void close() throws SecurityException
+	{
+	}
 }
