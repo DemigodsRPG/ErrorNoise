@@ -1,5 +1,5 @@
 name: ErrorNoise
-main: com.censoredsoftware.errornoise.ErrorNoise
+main: com.censoredsoftware.errornoise.ErrorNoisePlugin
 version: ${project.version}
 authors: [HmmmQuestionMark]
 permissions:
@@ -9,6 +9,3 @@ permissions:
     errornoise.annoytext:
         description: The second most annoying permission in the world.
         default: false
-commands:
-    showerror:
-        usage: /showerror

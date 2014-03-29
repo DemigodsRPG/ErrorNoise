@@ -1,6 +1,7 @@
 error:
-  warning: true
-  severe: true
+  levels:
+    - WARNING
+    - SEVERE
   seconds_to_wait: 8
   message: '&cAn error has occurred, please check the server console.'
   sound: BAT_IDLE
@@ -11,5 +12,3 @@ ignore:
   - 'moved too quickly'
   - 'Can\u0027t keep up!'
   - 'No compatible nms block class found.'
-console:
-  prevent_ignored_info: true
