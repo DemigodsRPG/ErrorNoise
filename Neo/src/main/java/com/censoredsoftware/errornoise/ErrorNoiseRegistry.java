@@ -41,11 +41,8 @@ public class ErrorNoiseRegistry
     static void register(Level level)
     {
         // Create and register an error handler for this log level.
-        LOGGER.addHandler(new ErrorHandler(record -> {
-            if(record.getLevel().equals(level)) {
-                alertErrorTasks(level);
-            }
-        }));
+        LOGGER.addHandler(new ErrorHandler(level));
+
         // Create and register an error task for this log level.
         TASKS.add(new ErrorTask(level));
     }

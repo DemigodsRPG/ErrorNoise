@@ -3,6 +3,7 @@ package com.censoredsoftware.errornoise;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
@@ -16,18 +17,18 @@ public class ErrorHandler extends Handler
 
     // -- END STATIC -- //
 
-    private final ErrorLambda lambda;
+    private final Level level;
 
-    ErrorHandler(ErrorLambda lambda)
+    ErrorHandler(Level level)
     {
-        this. lambda = lambda;
+        this.level = level;
     }
 
     @Override
     public void publish(LogRecord record)
     {
-        if(!ignoredMessages.contains(record.getMessage()))
-            lambda.publish(record);
+        if(!ignoredMessages.contains(record.getMessage()) && level.equals(record.getLevel()))
+            ErrorNoiseRegistry.alertErrorTasks(level);
     }
 
     @Override
