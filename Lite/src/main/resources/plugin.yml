@@ -1,5 +1,5 @@
 name: ErrorNoise-Lite
-main: com.censoredsoftware.errornoise.lite.ErrorNoiseLitePlugin
+main: com.demigodsrpg.errornoise.lite.ErrorNoiseLitePlugin
 version: ${project.version}
 authors: [HmmmQuestionMark]
 permissions:
