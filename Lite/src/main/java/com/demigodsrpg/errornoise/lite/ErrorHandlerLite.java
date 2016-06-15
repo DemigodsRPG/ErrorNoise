@@ -10,12 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 public class ErrorHandlerLite extends Handler {
-    // -- STATIC -- //
+    
+    // -- DATA -- //
 
     private boolean text;
     private Long time;
-
-    // -- END STATIC -- //
 
     public ErrorHandlerLite() {
         time = System.currentTimeMillis();
