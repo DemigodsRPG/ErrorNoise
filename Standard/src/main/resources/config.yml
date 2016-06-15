@@ -4,7 +4,7 @@ error:
     - SEVERE
   seconds_to_wait: 8
   message: '&cAn error has occurred, please check the server console.'
-  sound: BAT_IDLE
+  sound: ENTITY_BAT_AMBIENT
   volume: 2F
   pitch: 0.9F
 ignore:
